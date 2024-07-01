@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Name to Ticker Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 60px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Ticker Generator</h1>
+        <input type="text" id="nameInput" placeholder="Enter a name"><br>
+        <input type="text" id="numberInput" placeholder="Enter a 4-digit number"><br>
+        <button onclick="convertName()">Convert</button>
+        <p id="tickerOutput"></p>
+    </div>
+    <script>
+        const stateAbbreviations = {
+            "ALABAMA": "AL", "ALASKA": "AK", "ARIZONA": "AZ", "ARKANSAS": "AR", 
+            "CALIFORNIA": "CA", "COLORADO": "CO", "CONNECTICUT": "CT", "DELAWARE": "DE", 
+            "FLORIDA": "FL", "GEORGIA": "GA", "HAWAII": "HI", "IDAHO": "ID", 
+            "ILLINOIS": "IL", "INDIANA": "IN", "IOWA": "IA", "KANSAS": "KS", 
+            "KENTUCKY": "KY", "LOUISIANA": "LA", "MAINE": "ME", "MARYLAND": "MD", 
+            "MASSACHUSETTS": "MA", "MICHIGAN": "MI", "MINNESOTA": "MN", "MISSISSIPPI": "MS", 
+            "MISSOURI": "MO", "MONTANA": "MT", "NEBRASKA": "NE", "NEVADA": "NV", 
+            "NEW HAMPSHIRE": "NH", "NEW JERSEY": "NJ", "NEW MEXICO": "NM", "NEW YORK": "NY", 
+            "NORTH CAROLINA": "NC", "NORTH DAKOTA": "ND", "OHIO": "OH", "OKLAHOMA": "OK", 
+            "OREGON": "OR", "PENNSYLVANIA": "PA", "RHODE ISLAND": "RI", "SOUTH CAROLINA": "SC", 
+            "SOUTH DAKOTA": "SD", "TENNESSEE": "TN", "TEXAS": "TX", "UTAH": "UT", 
+            "VERMONT": "VT", "VIRGINIA": "VA", "WASHINGTON": "WA", "WEST VIRGINIA": "WV", 
+            "WISCONSIN": "WI", "WYOMING": "WY", "PUERTO RICO": "PR"
+        };
+
+        function convertName() {
+            const name = document.getElementById('nameInput').value;
+            const number = document.getElementById('numberInput').value;
+            const ticker = nameToTicker(name, number);
+            document.getElementById('tickerOutput').textContent = `Ticker: ${ticker}`;
+        }
+
+        function nameToTicker(name, number) {
+            // Convert name to uppercase
+            const upperName = name.toUpperCase();
+            
+            // Split the name into words
+            const words = upperName.split(' ');
+
+            let ticker = '';
+
+            // Check if the first word is a state
+            if (words.length > 0 && stateAbbreviations[words[0]]) {
+                ticker += stateAbbreviations[words[0]];
+                words.shift();
+            } else if (words.length > 0) {
+                ticker += words[0][0];
+                words.shift();
+            }
+
+            // Add first letters of remaining words up to 4 characters max
+            for (let word of words) {
+                if (ticker.length < 4 && word.length > 0) {
+                    ticker += word[0];
+                }
+            }
+
+
+            // Get the last two digits of the number
+            const lastTwoDigits = number.slice(-2);
+
+            // Append the last two digits to the ticker
+            ticker += ' ' + lastTwoDigits;
+
+            return ticker;
+        }
+    </script>
+</body>
+</html>
+
